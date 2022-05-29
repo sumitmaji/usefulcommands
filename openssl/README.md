@@ -13,10 +13,12 @@ openssl req -new -key ${APP_HOST}.key -out ${APP_HOST}.csr -subj "/CN=${APP_HOST
 -addext "subjectAltName = DNS:${APP_HOST}"
 openssl x509 -req -in ${APP_HOST}.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ${APP_HOST}.crt -days 7200
 ```
+
 - Checking content of csr
 ```shell
 openssl req  -noout -text -in lancelot.csr
 ```
+
 - Checking the context crt
 ```shell
 openssl x509 -noout -text -in /etc/kubernetes/pki/ca.crt
