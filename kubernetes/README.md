@@ -92,14 +92,18 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
     ```
 
 - Different ways of authenticating users and granting them access:
-    - Certificates
-      - Creating user certificates
+    1. Certificates
+      1. Creating user certificates
       ```shell
       # here `CN` contains the username and `O` contains user group name
+      # this creates key and csr file which need to be approved by ca(Certificate Authority)
       openssl genrsa -out ingress.key 4096
-      openssl req -new -key ingress.key -out ingress.csr -subj "/CN=ingress/O=ingress:masters"
-      openssl x509 -req -in ingress.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ingress.crt -days 7200
+      openssl req -new -key ingress.key -out ingress.csr -subj "/CN=ingress/O=ingress:masters" 
       ```
-        - Signing certificates using ca.crt
-        - Signing certificates via kubectl
-    - Token based authentication
+        1. Signing certificates using ca.crt
+        ```console
+        # The certificate is signed by certificate authority and corresponding crt file is generated.
+        openssl x509 -req -in ingress.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ingress.crt -days 7200
+        ```
+        2. Signing certificates via kubectl
+    2. Token based authentication
