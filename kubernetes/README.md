@@ -3,7 +3,7 @@
 
 - To use dnsutil pod:
     - Install dnutil pod
-    ```console
+    ```shell
     cat <<EOF | kubectl apply -f -
     apiVersion: v1
     kind: Pod
@@ -22,14 +22,14 @@
     EOF
     ```
     - Execute the command in pod
-    ```console
+    ```shell
     kubectl exec -i -t dnsutils -- nslookup kubernetes.default.svc.cloud.uat 
     ```
 
 - To use curl in pod
 
     - Install curl image
-    ```console
+    ```shell
     cat <<EOF | kubectl apply -f -
     apiVersion: v1
     kind: Pod
@@ -43,23 +43,23 @@
     EOF  
     ```
     - Execute command in pod
-    ```console
+    ```shell
     kubectl exec -i -t curl -- curl -kv https://kubenetes 
     ```
     - By putting `CURL_CA_BUNDLE` environment variable, you dont need to specify `--cacert` in the curl command
-    ```console
+    ```shell
     export CURL_CA_BUNDLE=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     ```
 
     - Calling kubernetes service api from container
-    ```console
+    ```shell
     export CURL_CA_BUNDLE=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
     curl -H "Athorization: Bearer $TOKEN" https://kubernetes
     ```
 
 - To generate a kubeconfig file having only server details. The below generates kubeconfig file /root/oauth.conf.
-```console
+```shell
 kubectl config set-cluster cloud.com --certificate-authority=/etc/kubernetes/pki/ca.crt --embed-certs=true --server=https://192.168.43.23:6443 --kubeconfig=/root/oauth.conf
 kubectl config --kubeconfig=/root/oauth.conf set-context oauthuser@cloud.com --cluster=cloud.com --user=oauthuser
 kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
@@ -67,7 +67,7 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
 
 - Creating roles for user/groups and granting them access
     - Granting access to a user
-    ```console
+    ```shell
     TODO
     ```
     - Granting access to a group
