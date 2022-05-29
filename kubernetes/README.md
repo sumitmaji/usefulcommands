@@ -40,7 +40,7 @@ curl -H "Athorization: Bearer $TOKEN" https://kubernetes
 
 - To use curl in pod
 
-  - Install curl image
+    - Install curl image
     ```console
     cat <<EOF | kubectl apply -f -
     apiVersion: v1
