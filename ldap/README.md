@@ -1,0 +1,50 @@
+- Search for user in ldap using admin
+```shell
+ldapsearch -x -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "cn=smaji" -D "cn=admin,,dc=default,dc=svc,dc=cloud,dc=uat" -w sumit -H ldap://ldap.default.svc.cloud.uat -LLL -H
+```
+
+- Add user to ldap
+```shell
+uid=$(< /var/userid)
+export UNAME=smaji
+export UPASSWORD=sumit
+export BASE_DN=dc=default,dc=svc,dc=cloud,dc=uat
+export LDAP_PASSWORD=sumit
+export LDAP_HOSTNAME=ldap://ldap.default.svc.cloud.uat
+gid=`ldapsearch -x -b "ou=groups,$BASE_DN" "cn=$2" -D "cn=admin,$BASE_DN" -w ${LDAP_PASSWORD} -H ${LDAP_HOSTNAME} -LLL gidNumber | grep 'gidNumber' | grep -Eo '[0-9]+'`
+cat <<EOF > alice.ldif
+dn: cn=$1,ou=users,$BASE_DN
+cn: $UNAME
+gidnumber: $gid
+givenname: Sumit
+homedirectory: /home/users/$UNAME
+loginshell: /bin/bash
+objectclass: inetOrgPerson
+objectclass: posixAccount
+objectclass: top
+sn: hadoop
+uid: smaji
+uidnumber: $uid
+userpassword: $UPASSWORD
+EOF
+echo $(($uid + 1)) > /var/userid
+```
+
+- Creating a group
+```shell
+uid=$(< /var/userid)
+gid=$(< /var/groupid)
+
+LDAP_PASSWORD:=sumit
+BASE_DN:=dc=default,dc=svc,dc=cloud,dc=uat
+GROUP_NAME=developers
+
+echo "dn: cn=$GROUP_NAME,ou=groups,$BASE_DN
+cn: $GROUP_NAME
+gidnumber: $gid
+objectclass: posixGroup
+objectclass: top
+" > /var/tmp/groups.ldif
+
+ldapadd -x -D "cn=admin,$BASE_DN" -w ${LDAP_PASSWORD} -H ldapi:/// -f /var/tmp/groups.ldif
+```
