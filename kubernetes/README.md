@@ -54,3 +54,7 @@ curl -H "Athorization: Bearer $TOKEN" https://kubernetes
         command: ["sleep", "9999999"]
     EOF  
     ```
+    - Execute command in pod
+    ```console
+    kubectl exec -i -t curl -- curl -kv https://kubenetes 
+    ```
