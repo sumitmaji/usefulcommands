@@ -178,3 +178,9 @@ get_etcd_cluster(){
 
 }
 ```
+
+- Substiture content in file from environment variable
+```shell
+cat example/app-ingress.yaml | \
+envsubst
+```
