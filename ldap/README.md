@@ -1,3 +1,8 @@
+# Ldap
+
+- Please refer links for more commands. [link](http://techpubs.spinlocksolutions.com/dklar/ldap.html),
+[link](https://www.lisenet.com/2014/install-and-configure-an-openldap-server-with-ssl-on-debian-wheezy/),
+
 - Search for user in ldap using admin
 ```shell
 ldapsearch -x -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "cn=smaji" -D "cn=admin,,dc=default,dc=svc,dc=cloud,dc=uat" -w sumit -H ldap://ldap.default.svc.cloud.uat -LLL -H
