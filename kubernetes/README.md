@@ -1,5 +1,49 @@
 
 - Kubernetes secrets are mounted on `/var/run/secrets/kubernetes.io/serviceaccount` directory
+- Using dig command to check if a hostname is getting resolved or nto
+```shell
+# Here the ip address is the ip address of dns server in kubernetes
+dig @192.168.255.31 master.cloud.com +noall +answer
+```
+- In order to add vm nameserver to dns server
+```shell
+kubectl get configmap coredns -n kube-system -o yaml
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+data:
+  Corefile: |
+    .:53 {
+        errors
+        health {
+           lameduck 5s
+        }
+        ready
+        kubernetes cloud.uat in-addr.arpa ip6.arpa {
+           pods insecure
+           fallthrough in-addr.arpa ip6.arpa
+           ttl 30
+        }
+        prometheus :9153
+        forward . /etc/resolv.conf {
+           max_concurrent 1000
+        }
+        cache 30
+        loop
+        reload
+        loadbalance
+    }
+    cloud.com:53 {
+        errors
+        cache 30
+        forward . 11.0.0.1
+    }    
+kind: ConfigMap
+metadata:
+  name: coredns
+  namespace: kube-system
+EOF
+kubectl delete pod --namespace kube-system -l k8s-app=kube-dns
+```
 
 - To use dnsutil pod:
     - Install dnutil pod
