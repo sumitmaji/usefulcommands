@@ -103,9 +103,14 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
        ```
           1. Signing certificates using ca.crt
           ```shell
+          export USERNAME=sumit
+          openssl x509 -req -in ${USERNAME}.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ${USERNAME}.crt -days 7200
+          ```
+          2. Signing certificates via kubectl
+          ```shell
           # The certificate is signed by certificate authority and corresponding crt file is generated.
           export USERNAME=sumit
-          cat <<EOF > sing-request.yaml
+          cat <<EOF > ${USERNAME}-signing-request.yaml
           apiVersion: certificates.k8s.io/v1
           kind: CertificateSigningRequest
           metadata:
@@ -122,11 +127,11 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
               - client auth
           EOF
           export B64=`cat ${USERNAME}.csr | base64 | tr -d '\n'`
-          openssl x509 -req -in ingress.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ingress.crt -days 7200
-          ```
-          2. Signing certificates via kubectl
-          ```shell
-          
+          sed -i "s@__USERNAME__@${USERNAME}@" ${USERNAME}-signing-request.yaml
+          sed -i "s@__CSRREQUEST__@${B64}@" ${USERNAME}-signing-request.yaml
+          kubectl create -f ${USERNAME}-signing-request.yaml
+          kubectl certificate approve ${USERNAME}-csr
+          kubectl get csr ${USERNAME}-csr -o jsonpath='{.status.certificate}' | base64 -d > ${USERNAME}.crt
           ```
           3. Using certificates to create kubeconfig file
           4. Using kubeconfig file to login.
