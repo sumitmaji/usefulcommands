@@ -72,6 +72,8 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
     ```
     - Granting access to a group
     ```shell
+    # This assign cluster-admin role to dashboard:master group, any user
+    # Who belongs to this group will have cluster admin role.
     cat <<EOF | kubectl create -f -
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
