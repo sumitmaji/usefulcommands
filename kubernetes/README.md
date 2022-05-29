@@ -181,3 +181,50 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
          kubectl --kubeconfig admin.conf create clusterrolebinding alice --clusterrole alice --user alice
          kubectl --kubeconfig admin.conf --user alice get nodes
          ```
+- Get all the api resources of kubernetes
+```shell
+kubectl api-resources | grep "NAMESPACED\|Role"
+```
+
+- Get component status
+```shell
+kubectl get componentstatus
+```
+
+- not all verbs apply to each resource! If you want to check which verbs apply to the resource you are restricting access to, you should use kubectl api-resources -owide. For example, for Pods you can use
+```shell
+kubectl api-resources -o wide | grep "Pod\|VERBS"
+```
+
+- Describe a role
+```shell
+kubectl describe clusterrole pod-reader
+```
+
+- How check various permission
+```shell
+kubectl auth can-i get nodes -A
+kubectl auth can-i get pods -A
+kubectl auth can-i get pods -n round-table
+kubectl auth can-i update deployments -n round-table
+kubectl auth can-i get nodes --as lancelot -A
+```
+
+- How check which roles we have from config file
+    1. First get the user name from the current-context in kubeconfig file
+    ```shell
+    kubectl config view | grep current-context
+    ```
+    2. Decode the based64 encoded `client-certificate-date` field, check `O` in the output
+    ```shell
+    echo '<base64 encoded cert>' | base64 --decode > admin.crt
+    openssl x509 -noout -text -in admin.crt
+    ```
+    3. Check the name column in below output
+    ```shell
+    kubectl get clusterrolebinding -owide | grep 'ROLE\|system:masters\|kubernetes-admin'
+    ```
+    4. Describe the role details
+    ```shell
+    kubectl describe clusterrole cluster-admin
+    ```
