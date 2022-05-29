@@ -91,48 +91,63 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
     EOF
     ```
 
-- Different ways of authenticating users and granting them access:
-    1. Certificates
-       1. Creating user certificates
-       ```shell
-       # here `CN` contains the username and `O` contains user group name
-       # this creates key and csr file which need to be approved by ca(Certificate Authority)
-       export USERNAME=sumit
-       openssl genrsa -out ${USERNAME}.key 4096
-       openssl req -new -key ${USERNAME}.key -out ${USERNAME}.csr -subj "/CN=${USERNAME}/O=cloud:masters"
-       ```
-          1. Signing certificates using ca.crt
-          ```shell
-          export USERNAME=sumit
-          openssl x509 -req -in ${USERNAME}.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ${USERNAME}.crt -days 7200
-          ```
-          2. Signing certificates via kubectl
-          ```shell
-          # The certificate is signed by certificate authority and corresponding crt file is generated.
-          export USERNAME=sumit
-          cat <<EOF > ${USERNAME}-signing-request.yaml
-          apiVersion: certificates.k8s.io/v1
-          kind: CertificateSigningRequest
-          metadata:
-            name: __USERNAME__-csr
-          spec:
-            groups:
-              - system:authenticated
-              - cloud:masters
-            request: __CSRREQUEST__
-            signerName: kubernetes.io/kube-apiserver-client
-            usages:
-              - digital signature
-              - key encipherment
-              - client auth
-          EOF
-          export B64=`cat ${USERNAME}.csr | base64 | tr -d '\n'`
-          sed -i "s@__USERNAME__@${USERNAME}@" ${USERNAME}-signing-request.yaml
-          sed -i "s@__CSRREQUEST__@${B64}@" ${USERNAME}-signing-request.yaml
-          kubectl create -f ${USERNAME}-signing-request.yaml
-          kubectl certificate approve ${USERNAME}-csr
-          kubectl get csr ${USERNAME}-csr -o jsonpath='{.status.certificate}' | base64 -d > ${USERNAME}.crt
-          ```
-          3. Using certificates to create kubeconfig file
-          4. Using kubeconfig file to login.
-    2. Token based authentication
+  - Different ways of authenticating users and granting them access:
+      1. Certificates
+         1. Creating user certificates
+         ```shell
+         # here `CN` contains the username and `O` contains user group name, same group name should existing while creaing roles and assigning them access
+         # this creates key and csr file which need to be approved by ca(Certificate Authority)
+         export USERNAME=sumit
+         openssl genrsa -out ${USERNAME}.key 4096
+         openssl req -new -key ${USERNAME}.key -out ${USERNAME}.csr -subj "/CN=${USERNAME}/O=cloud:masters"
+         ```
+            1. Signing certificates using ca.crt
+            ```shell
+            export USERNAME=sumit
+            openssl x509 -req -in ${USERNAME}.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ${USERNAME}.crt -days 7200
+            ```
+            2. Signing certificates via kubectl
+            ```shell
+            # The certificate is signed by certificate authority and corresponding crt file is generated.
+            export USERNAME=sumit
+            cat <<EOF > ${USERNAME}-signing-request.yaml
+            apiVersion: certificates.k8s.io/v1
+            kind: CertificateSigningRequest
+            metadata:
+              name: __USERNAME__-csr
+            spec:
+              groups:
+                - system:authenticated
+                - cloud:masters
+              request: __CSRREQUEST__
+              signerName: kubernetes.io/kube-apiserver-client
+              usages:
+                - digital signature
+                - key encipherment
+                - client auth
+            EOF
+            export B64=`cat ${USERNAME}.csr | base64 | tr -d '\n'`
+            sed -i "s@__USERNAME__@${USERNAME}@" ${USERNAME}-signing-request.yaml
+            sed -i "s@__CSRREQUEST__@${B64}@" ${USERNAME}-signing-request.yaml
+            kubectl create -f ${USERNAME}-signing-request.yaml
+            kubectl certificate approve ${USERNAME}-csr
+            kubectl get csr ${USERNAME}-csr -o jsonpath='{.status.certificate}' | base64 -d > ${USERNAME}.crt
+            ```
+         2. Using certificates to create kubeconfig file
+         ```shell
+         export CLUSTER=cloud.com
+         export CA_CERTIFICATE=/etc/kubernetes/pki/ca.crt
+         export API_SERVER=https://192.168.0.12:6443
+         export USERNAME=sumit
+         kubectl config set-cluster $CLUSTER --certificate-authority=$CA_CERTIFICATE --embed-certs=true --server=$API_SERVER --kubeconfig=${USERNAME}-kubeconfig
+         kubectl config set-credentials ${USERNAME} --client-certificate=${USERNAME}.crt --client-key=${USERNAME}.key --embed-certs=true --kubeconfig=${USERNAME}-kubeconfig
+         kubectl config set-context $CLUSTER --cluster=$CLUSTER --user=${USERNAME} --kubeconfig=${USERNAME}-kubeconfig
+         kubectl config use-context cloud.com --kubeconfig=${USERNAME}-kubeconfig
+         ```
+         3. Using kubeconfig file to login.
+         ```shell
+         export USERNAME=sumit
+         alias kctl='kubectl --kubeconfig=${USERNAME}-kubeconfig' 
+         kctl get po
+         ```
+      3. Token based authentication
