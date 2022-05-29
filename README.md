@@ -143,6 +143,16 @@ APISERVER_HOST="$(echo $APISERVER_HOST | sed 's/\//\\\//g')"
 sed -i "s/\$APISERVER_HOST/$APISERVER_HOST/" $WORKDIR/v1.6.3.yaml
 ```
 
+- Append at the end of the file
+```shell
+sed -i '$a\##rndc-key copy end' ./rndc-key
+```
+
+- Appending after certain line
+```shell
+sed '393 a \            - --default-backend-service=$(POD_NAMESPACE)/default-backend' ./rndc-key
+```
+
 - Looping through string using split 
 ```shell
 get_etcd_cluster(){
