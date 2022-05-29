@@ -93,17 +93,41 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
 
 - Different ways of authenticating users and granting them access:
     1. Certificates
-      1. Creating user certificates
-      ```shell
-      # here `CN` contains the username and `O` contains user group name
-      # this creates key and csr file which need to be approved by ca(Certificate Authority)
-      openssl genrsa -out ingress.key 4096
-      openssl req -new -key ingress.key -out ingress.csr -subj "/CN=ingress/O=ingress:masters" 
-      ```
-        1. Signing certificates using ca.crt
-        ```console
-        # The certificate is signed by certificate authority and corresponding crt file is generated.
-        openssl x509 -req -in ingress.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ingress.crt -days 7200
-        ```
-        2. Signing certificates via kubectl
+       1. Creating user certificates
+       ```shell
+       # here `CN` contains the username and `O` contains user group name
+       # this creates key and csr file which need to be approved by ca(Certificate Authority)
+       export USERNAME=sumit
+       openssl genrsa -out ${USERNAME}.key 4096
+       openssl req -new -key ${USERNAME}.key -out ${USERNAME}.csr -subj "/CN=${USERNAME}/O=cloud:masters"
+       ```
+          1. Signing certificates using ca.crt
+          ```shell
+          # The certificate is signed by certificate authority and corresponding crt file is generated.
+          export USERNAME=sumit
+          cat <<EOF > sing-request.yaml
+          apiVersion: certificates.k8s.io/v1
+          kind: CertificateSigningRequest
+          metadata:
+            name: __USERNAME__-csr
+          spec:
+            groups:
+              - system:authenticated
+              - cloud:masters
+            request: __CSRREQUEST__
+            signerName: kubernetes.io/kube-apiserver-client
+            usages:
+              - digital signature
+              - key encipherment
+              - client auth
+          EOF
+          export B64=`cat ${USERNAME}.csr | base64 | tr -d '\n'`
+          openssl x509 -req -in ingress.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ingress.crt -days 7200
+          ```
+          2. Signing certificates via kubectl
+          ```shell
+          
+          ```
+          3. Using certificates to create kubeconfig file
+          4. Using kubeconfig file to login.
     2. Token based authentication
