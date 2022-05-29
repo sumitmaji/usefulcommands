@@ -1,5 +1,5 @@
 # Useful Commands
-
+- Put any shell script in /usr/local/bin to be available on path.
 - Stop the kubelet service running in vm
 ```shell
 systemctl stop kubelet
@@ -183,4 +183,26 @@ get_etcd_cluster(){
 ```shell
 cat example/app-ingress.yaml | \
 envsubst
+```
+
+- Search for all files in dirctories and subdirectories using grep
+```shell
+grep -rnw '/path/to/somewhere/' -e 'pattern'
+-r or -R is recursive,
+-n is line number, and
+-w stands for match the whole word.
+-l (lower-case L) can be added to just give the file name of matching files.
+Along with these, --exclude, --include, --exclude-dir or --include-dir flags could be used for efficient searching:
+
+This will only search through those files which have .c or .h extensions:
+grep --include=\*.{c,h} -rnw '/path/to/somewhere/' -e "pattern"
+grep --exclude=*.o -rnw '/path/to/somewhere/' -e "pattern"
+grep --exclude-dir={dir1,dir2,*.dst} -rnw '/path/to/somewhere/' -e "pattern"
+```
+
+- Journalctl commands
+```shell
+journalctl -b0 --system _COMM=systemd
+journalctl -b0 SYSLOG_PID=1
+journalctl -u kubelet
 ```

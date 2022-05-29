@@ -53,3 +53,14 @@ objectclass: top
 
 ldapadd -x -D "cn=admin,$BASE_DN" -w ${LDAP_PASSWORD} -H ldapi:/// -f /var/tmp/groups.ldif
 ```
+
+
+```shell
+ldapsearch -x -b "dc=cloud,dc=com" -H ldap://ldap.cloud.com -LL
+ldapdelete "cn=kdc-srv,ou=krb5,dc=cloud,dc=com" -x -D 'cn=admin,dc=cloud,dc=com' -w sumit -H ldapi:///
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config "(|(cn=config)(olcDatabase={1}hdb))"
+ldapmodify -QY EXTERNAL -H ldapi:/// -f ~/olc-mod1.ldif
+ldapsearch -x -H ldap:/// -LLL -D 'cn=admin,dc=default,dc=svc,dc=cloud,dc=uat' -w sumit -b "cn=schema,cn=config" "(objectClass=olcSchemaConfig)" dn -Z 
+ldapsearch -x -H ldap:/// -L -D 'cn=admin,dc=default,dc=svc,dc=cloud,dc=uat' -w sumit -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "(uid=smaji)" dn -Z 
+ldapsearch -x -H ldap://ldap.default.svc.cloud.uat -D 'cn=admin,dc=default,dc=svc,dc=cloud,dc=uat' -w sumit -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "(uid=smaji)"
+```

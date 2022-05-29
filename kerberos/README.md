@@ -86,3 +86,9 @@ sudo /usr/sbin/sshd -D -ddd
 ```shell
 ssh -vvv smaji@ssh-server
 ```
+
+```shell
+kinit -p smaji
+kadmin -p root/admin
+addprinc -pw sumit smaji
+```

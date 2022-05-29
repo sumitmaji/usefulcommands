@@ -57,3 +57,18 @@ curl --header "Content-Type: application/json" \
 ```shell
 curl .... | jq 
 ```
+
+- To send key and certificate
+```shell
+curl https://192.168.1.7/ui --cert /export/kubecertificate/certs/server.crt --key /export/kubecertificate/certs/server.key --cacert /export/kubecertificate/certs/ca.crt
+```
+
+- To send host in the header
+```shell
+curl -H 'Host:master.cloud.com' https://11.0.0.2:30000/
+```
+
+
+```shell
+curl -i --negotiate -k -u: "https://hdfs-master.cloud.com:50470/webhdfs/v1/?op=LISTSTATUS"
+```
