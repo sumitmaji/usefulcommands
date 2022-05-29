@@ -73,7 +73,8 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
     - Granting access to a group
     ```shell
     # This assign cluster-admin role to dashboard:master group, any user
-    # Who belongs to this group will have cluster admin role.
+    # Who belongs to this group will have cluster admin role. name under subjects tags 
+    # can contain any group name
     cat <<EOF | kubectl create -f -
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
@@ -90,5 +91,12 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
     EOF
     ```
 
-- Different ways of creating users and granting them access:
-    - Using certificates and using the certificates in kubeconfig file
+- Different ways of authenticating users and granting them access:
+    - Certificates
+      - Creating user certificates
+  ```shell
+  Hi  
+  ```
+        - Signing certificates using ca.crt
+        - Signing certificates via kubectl
+    - Token based authentication
