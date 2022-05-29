@@ -26,6 +26,8 @@
     kubectl exec -i -t dnsutils -- nslookup kubernetes.default.svc.cloud.uat 
     ```
 
+- [ClusterConfiguration](https://pkg.go.dev/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2#ClusterConfiguration) file to be used in kubeadm
+
 - To use curl in pod
 
     - Install curl image
@@ -164,7 +166,8 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
          ```shell
          kubectl --kubeconfig=oauth.conf --token=__TOKEN__ get po
          ```
-      3. Proxy based authentication.
+      3. [Webhook](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) based authentication.
+      This is yet to be done, details present in the [link](https://itnext.io/implementing-ldap-authentication-for-kubernetes-732178ec2155)
          1. Setup Kubernetes to enable proxy based authentication.
          2. Setup a [`proxy application`](https://github.com/sumitmaji/kubeauthentication/blob/main/src/main/java/com/sum/security/KubeController.java), 
          that would authenticate user credentials return TokenReview object containing authenticated and group details. Please check the above
