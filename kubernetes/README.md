@@ -153,8 +153,14 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
       2. Token based authentication - OpenId Connect
          1. Setup kubernetes to enable oidc. Refer the [`link`](https://github.com/sumitmaji/kubernetes/blob/master/install_k8s/cluster-config-master.yaml#L8) to for set up.
          2. Setup a [`proxy application`](https://github.com/sumitmaji/kubeauthentication/blob/main/src/main/java/com/sum/security/KubeController.java), that would authenticate user credentials with openId connect and returns id_token.
-         3. A [`cli`](https://github.com/sumitmaji/kubernetes/tree/master/install_k8s/kube-login) that would call the proxy application and saves the token. 
-         4. Pass the token via kubectl command
+         3. A [`cli`](https://github.com/sumitmaji/kubernetes/tree/master/install_k8s/kube-login) that would call the proxy application and saves the token.
+         4. Create kubeconf file containing server details, below command would create oauth.conf file.
+         ```shell
+         kubectl config set-cluster cloud.com --certificate-authority=/etc/kubernetes/pki/ca.crt --embed-certs=true --server=https://192.168.43.23:6443 --kubeconfig=oauth.conf
+         kubectl config --kubeconfig=oauth.conf set-context oauthuser@cloud.com --cluster=cloud.com --user=oauthuser
+         kubectl config --kubeconfig=oauth.conf use-context oauthuser@cloud.com
+         ```
+         5. Pass the token via kubectl command
          ```shell
          kubectl --kubeconfig=oauth.conf --token=__TOKEN__ get po
          ```
@@ -165,6 +171,7 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
          url for more details.
          3. Pass the user authentication details to kubernetes
          ```shell
+         kubectl --kubeconfig admin.conf config set-credentials alice --token alice:alicepassword
          # Create ClusterRole
          kubectl --kubeconfig admin.conf create clusterrole alice --resource nodes --verb list
          # Create ClusterRoleBinding
