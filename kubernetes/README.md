@@ -108,7 +108,7 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
             export USERNAME=sumit
             openssl x509 -req -in ${USERNAME}.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out ${USERNAME}.crt -days 7200
             ```
-            2. Signing certificates via kubectl
+            2. Signing certificates via kubectl. [Link](https://faun.pub/how-to-add-an-user-to-a-kubernetes-cluster-an-overview-of-authn-in-k8s-d198adc08119)
             ```shell
             # The certificate is signed by certificate authority and corresponding crt file is generated.
             export USERNAME=sumit
@@ -191,7 +191,7 @@ kubectl api-resources | grep "NAMESPACED\|Role"
 kubectl get componentstatus
 ```
 
-- not all verbs apply to each resource! If you want to check which verbs apply to the resource you are restricting access to, you should use kubectl api-resources -owide. For example, for Pods you can use
+- Not all verbs apply to each resource! If you want to check which verbs apply to the resource you are restricting access to, you should use kubectl api-resources -owide. For example, for Pods you can use
 ```shell
 kubectl api-resources -o wide | grep "Pod\|VERBS"
 ```
@@ -201,7 +201,7 @@ kubectl api-resources -o wide | grep "Pod\|VERBS"
 kubectl describe clusterrole pod-reader
 ```
 
-- How check various permission
+- How check various permission [Link](https://faun.pub/assign-permissions-to-an-user-in-kubernetes-an-overview-of-rbac-based-authz-in-k8s-7d9e5e1099f1)
 ```shell
 kubectl auth can-i get nodes -A
 kubectl auth can-i get pods -A
@@ -210,7 +210,7 @@ kubectl auth can-i update deployments -n round-table
 kubectl auth can-i get nodes --as lancelot -A
 ```
 
-- How check which roles we have from config file
+- How check which roles we have from config file. [Link](https://faun.pub/assign-permissions-to-an-user-in-kubernetes-an-overview-of-rbac-based-authz-in-k8s-7d9e5e1099f1)
     1. First get the user name from the current-context in kubeconfig file
     ```shell
     kubectl config view | grep current-context
