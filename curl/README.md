@@ -8,7 +8,7 @@ curl -si https://master.cloud.com:32028/app1 | head -n
 
 - To disable certificate check
 ```console
-curl -sk -i auth.cub.marchenko.net.ua/check | head -n 
+curl -sk -i https://master.cloud.com:32028/app1 | head -n 
 ```
 
 - To increase the verbosity, this would show you request headers.
@@ -19,6 +19,11 @@ curl -kv auth.cub.marchenko.net.ua/check | head -n
 - To add values in header
 ```console
 curl -si -H "Cookie: authorization=345" https://master.cloud.com:32028/app1
+```
+
+- Providing ca certificate
+```console
+curl --cacert ${path to ca certificate ca.crt} https://master.cloud.com:32028/app1 
 ```
 
 - To send bearer token
