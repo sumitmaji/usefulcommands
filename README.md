@@ -112,3 +112,59 @@ get_data(){
 MY_VARIABLE=$(get_data)
 ```
 
+- Check if file exists or vise versa
+```shell
+if [ ! -f kubernetes-server-linux-amd64.tar.gz ]
+then
+  #TODO
+fi
+```
+
+- Check if directory exists or vise versa
+```shell
+if [ ! -d /opt/kubernetes ]
+then
+ #TODO
+fi
+```
+
+- Check if command is executed successfully
+```shell
+ar -xf kubernetes-server-linux-amd64.tar.gz -C /opt/
+ if [ $? -ne 0 ]
+ then
+   exit 1
+ fi
+```
+
+- Inorder to put replace string having `/` using sed, follow below commands
+```shell
+APISERVER_HOST="$(echo $APISERVER_HOST | sed 's/\//\\\//g')"
+sed -i "s/\$APISERVER_HOST/$APISERVER_HOST/" $WORKDIR/v1.6.3.yaml
+```
+
+- Looping through string using split 
+```shell
+get_etcd_cluster(){
+# String has format: ETCD_CLUSTERS=IP1:HOST1,IP2:HOST2...
+ IFS=','
+ counter=0
+ cluster=""
+ for worker in $ETCD_CLUSTERS; do
+  oifs=$IFS
+  IFS=':'
+  read -r ip node <<< "$worker"
+  if [ -z "$cluster" ]
+  then
+   cluster="$node=${proto}://$ip:2380"
+  else
+   cluster="$cluster,$node=${proto}://$ip:2380"
+  fi
+  counter=$((counter+1))
+  IFS=$oifs
+ done
+ unset IFS
+ echo "$cluster"
+
+}
+```
