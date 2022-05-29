@@ -4,32 +4,32 @@
 
 `GET Calls`
 - Normal curl call
-```console
+```shell
 curl -si https://master.cloud.com:32028/app1 | head -n 
 ```
 
 - To disable certificate check
-```console
+```shell
 curl -sk -i https://master.cloud.com:32028/app1 | head -n 
 ```
 
 - To increase the verbosity, this would show you request headers.
-```console
+```shell
 curl -kv auth.cub.marchenko.net.ua/check | head -n
 ```
 
 - To add values in header
-```console
+```shell
 curl -si -H "Cookie: authorization=345" https://master.cloud.com:32028/app1
 ```
 
 - Providing ca certificate
-```console
+```shell
 curl --cacert ${path to ca certificate ca.crt} https://master.cloud.com:32028/app1 
 ```
 
 - To send bearer token
-```console
+```shell
 curl -k https://master.cloud.com/api
    -H "Accept: application/json"
    -H "Authorization: Bearer {token}"
@@ -38,7 +38,7 @@ curl -k https://master.cloud.com/api
 `POST Calls`
 
 - To send json data in body of the request
-```console
+```shell
 curl --header "Content-Type: application/json" \
   --request POST \
   --data '{"login":"my_login","password":"my_password"}' \
@@ -46,7 +46,7 @@ curl --header "Content-Type: application/json" \
 ```
 
 - To send json data as in the body of the request present in file, tr.json is a file containing json data
-```console
+```shell
 curl --header "Content-Type: application/json" \
   --request POST \
   --data @tr.json \
@@ -54,6 +54,6 @@ curl --header "Content-Type: application/json" \
 ```
 
 - To pretty print data coming from curl
-```console
+```shell
 curl .... | jq 
 ```
