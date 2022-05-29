@@ -14,7 +14,6 @@ curl -H "Athorization: Bearer $TOKEN" https://kubernetes
 ```
 
 - To use dnsutil pod:
-
     - Install dnutil pod
     ```console
     cat <<EOF | kubectl apply -f -
@@ -32,11 +31,26 @@ curl -H "Athorization: Bearer $TOKEN" https://kubernetes
         - "3600"
           imagePullPolicy: IfNotPresent
           restartPolicy: Always
-          EOF
+    EOF
     ```
     - Execute the command in pod
     ```console
     kubectl exec -i -t dnsutils -- nslookup kubernetes.default.svc.cloud.uat 
     ```
 
+- To use curl in pod
 
+  - Install curl image
+    ```console
+    cat <<EOF | kubectl apply -f -
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: curl
+    spec:
+      containers:
+      - name: main
+        image: tutum/curl
+        command: ["sleep", "9999999"]
+    EOF  
+    ```
