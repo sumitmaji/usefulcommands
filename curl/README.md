@@ -1,5 +1,7 @@
 # Curl Commands
 
+- The [link](https://reqbin.com/req/c-dwjszac0/curl-post-json-example) has good examples of using curl.
+
 `GET Calls`
 - Normal curl call
 ```console
