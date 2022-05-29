@@ -89,3 +89,26 @@ MY_ECHO=$(echo "abc")
 echo $MY_ECHO
 ```
 
+- Applying shell script in cat command, also using variable values
+```shell
+cat <<EOF | sudo tee openssl.cnf
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+HOSTNAME=$(hostname -s)
+$keyUsage
+`
+if [ $TYPE == 'server' ]
+then 
+echo "subjectAltName = IP:$NODE_IP, DNS:$HOSTNAME"
+fi`
+EOF
+```
+
+- Taking output from method call and assign it to variable
+```shell
+get_data(){
+  echo "My data"
+}
+
+MY_VARIABLE=$(get_data)
+```
+
