@@ -57,3 +57,36 @@
     TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
     curl -H "Athorization: Bearer $TOKEN" https://kubernetes
     ```
+
+- To generate a kubeconfig file having only server details. The below generates kubeconfig file /root/oauth.conf.
+```console
+kubectl config set-cluster cloud.com --certificate-authority=/etc/kubernetes/pki/ca.crt --embed-certs=true --server=https://192.168.43.23:6443 --kubeconfig=/root/oauth.conf
+kubectl config --kubeconfig=/root/oauth.conf set-context oauthuser@cloud.com --cluster=cloud.com --user=oauthuser
+kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
+```
+
+- Creating roles for user/groups and granting them access
+    - Granting access to a user
+    ```console
+    TODO
+    ```
+    - Granting access to a group
+    ```shell
+    cat <<EOF | kubectl create -f -
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: dashboard-cluster-admin
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+    - apiGroup: rbac.authorization.k8s.io
+      kind: Group
+      name: dashboard:masters
+    EOF
+    ```
+
+- Different ways of creating users and granting them access:
+    - Using certificates and using the certificates in kubeconfig file

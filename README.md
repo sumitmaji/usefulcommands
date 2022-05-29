@@ -29,3 +29,11 @@ su -c "echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '
 ```console
 free -h 
 ```
+
+- To add content to file
+```console
+cat <<EOF > output.txt
+test
+EOF 
+```
+
