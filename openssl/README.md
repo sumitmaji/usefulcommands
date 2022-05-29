@@ -23,3 +23,9 @@ openssl req  -noout -text -in lancelot.csr
 ```shell
 openssl x509 -noout -text -in /etc/kubernetes/pki/ca.crt
 ```
+
+- Adding certificate for browser
+```shell
+openssl pkcs12 -export -clcerts -inkey ${USERNAME}.key -in temp.crt -out ${USERNAME}.p12 -name "kubernetes-client"
+# Add the p12 file in browser certificate
+```
