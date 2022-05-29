@@ -150,4 +150,24 @@ kubectl config --kubeconfig=/root/oauth.conf use-context oauthuser@cloud.com
          alias kctl='kubectl --kubeconfig=${USERNAME}-kubeconfig' 
          kctl get po
          ```
-      3. Token based authentication
+      2. Token based authentication - OpenId Connect
+         1. Setup kubernetes to enable oidc. Refer the [`link`](https://github.com/sumitmaji/kubernetes/blob/master/install_k8s/cluster-config-master.yaml#L8) to for set up.
+         2. Setup a [`proxy application`](https://github.com/sumitmaji/kubeauthentication/blob/main/src/main/java/com/sum/security/KubeController.java), that would authenticate user credentials with openId connect and returns id_token.
+         3. A [`cli`](https://github.com/sumitmaji/kubernetes/tree/master/install_k8s/kube-login) that would call the proxy application and saves the token. 
+         4. Pass the token via kubectl command
+         ```shell
+         kubectl --kubeconfig=oauth.conf --token=__TOKEN__ get po
+         ```
+      3. Proxy based authentication.
+         1. Setup Kubernetes to enable proxy based authentication.
+         2. Setup a [`proxy application`](https://github.com/sumitmaji/kubeauthentication/blob/main/src/main/java/com/sum/security/KubeController.java), 
+         that would authenticate user credentials return TokenReview object containing authenticated and group details. Please check the above
+         url for more details.
+         3. Pass the user authentication details to kubernetes
+         ```shell
+         # Create ClusterRole
+         kubectl --kubeconfig admin.conf create clusterrole alice --resource nodes --verb list
+         # Create ClusterRoleBinding
+         kubectl --kubeconfig admin.conf create clusterrolebinding alice --clusterrole alice --user alice
+         kubectl --kubeconfig admin.conf --user alice get nodes
+         ```
