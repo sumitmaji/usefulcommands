@@ -1,37 +1,37 @@
 # Useful Commands
 
 - Stop the kubelet service running in vm
-```console
+```shell
 systemctl stop kubelet
 ```
 
 - Start the kubelet service running in vm
-```console
+```shell
 systemctl start kubelet
 ```
 
 - Check the status of kubelet service
-```console
+```shell
 systemctl status kubelet
 ```
 
 - Debugging logs in kubelet
-```console
+```shell
 journalctl -u kubelet 
 ```
 
 - To free ram memory
-```console
+```shell
 su -c "echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'" root 
 ```
 
 - To check ram memory
-```console
+```shell
 free -h 
 ```
 
 - To add content to file
-```console
+```shell
 cat <<EOF > output.txt
 test
 EOF 
