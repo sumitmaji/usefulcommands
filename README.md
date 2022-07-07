@@ -217,3 +217,17 @@ journalctl -u kubelet
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
 ```
+
+- Git sync
+```shell
+#Script to sync github repo
+#!/bin/bash
+for reponame in `curl -H "Accept: application/vnd.github+json" -H "Authorization: token $TOKEN" https://api.github.com/user/repos | jq '.[].name' | cut -d \" -f 2`
+do
+    echo "RepoName is : $reponame"
+    mkdir $reponame
+    cd $reponame
+    git clone https://github.com/sumitmaji/$reponame
+    cd ../
+done
+```
