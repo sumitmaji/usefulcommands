@@ -222,7 +222,7 @@ sudo dpkg -i google-chrome-stable_current_amd64.deb
 ```shell
 #Script to sync github repo
 #!/bin/bash
-for reponame in `curl -H "Accept: application/vnd.github+json" -H "Authorization: token $TOKEN" https://api.github.com/user/repos | jq '.[].name' | cut -d \" -f 2`
+for reponame in `curl -H "Accept: application/vnd.github+json" -H "Authorization: token $TOKEN" https://api.github.com/user/repos?per_page=50 | jq '.[].name' | cut -d \" -f 2`
 do
     echo "RepoName is : $reponame"
     mkdir $reponame
