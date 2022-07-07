@@ -8,6 +8,9 @@ dig @192.168.255.31 master.cloud.com +noall +answer
 - In order to add vm nameserver to dns server
 ```shell
 kubectl get configmap coredns -n kube-system -o yaml
+```
+
+```shell
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 data:
@@ -42,6 +45,9 @@ metadata:
   name: coredns
   namespace: kube-system
 EOF
+```
+
+```shell
 kubectl delete pod --namespace kube-system -l k8s-app=kube-dns
 ```
 
