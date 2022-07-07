@@ -137,6 +137,11 @@ ar -xf kubernetes-server-linux-amd64.tar.gz -C /opt/
  fi
 ```
 
+- Replace content of variable and assign it to a new variable
+```shell
+CERT_NAME=${APP_HOST//./-}
+```
+
 - Inorder to put replace string having `/` using sed, follow below commands
 ```shell
 APISERVER_HOST="$(echo $APISERVER_HOST | sed 's/\//\\\//g')"
