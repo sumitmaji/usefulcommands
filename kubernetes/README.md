@@ -52,17 +52,17 @@ kubectl delete pod --namespace kube-system -l k8s-app=kube-dns
     apiVersion: v1
     kind: Pod
     metadata:
-    name: dnsutils
-    namespace: default
+      name: dnsutils
+      namespace: default
     spec:
-    containers:
-    - name: dnsutils
-      image: k8s.gcr.io/e2e-test-images/jessie-dnsutils:1.3
-      command:
-        - sleep
-        - "3600"
-          imagePullPolicy: IfNotPresent
-          restartPolicy: Always
+      containers:
+      - name: dnsutils
+        image: k8s.gcr.io/e2e-test-images/jessie-dnsutils:1.3
+        command:
+          - sleep
+          - "3600"
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
     EOF
     ```
     - Execute the command in pod
