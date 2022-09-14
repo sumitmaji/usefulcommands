@@ -115,3 +115,8 @@ changetype: modify
 delete: mail
 EOF
 ```
+
+- Search for an attribute
+```shell
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "cn=config" | less
+```
