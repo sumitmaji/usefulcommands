@@ -93,3 +93,8 @@ ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config "(|(cn=config)(olcDatabase=
 ```shell
 ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "ou=users,dc=cloud,dc=com" "cn=smaji"
 ```
+
+- To seach for specific attribute
+```shell
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "ou=users,dc=cloud,dc=com" "cn=smaji" givenName
+```
