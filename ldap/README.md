@@ -75,7 +75,12 @@ nmap -p 389 localhost
 slapcat
 ```
 
-- To check a specific schema
+- To see all the schema
+```shell
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config
+```
+
+- To filter a specific schema
 ```shell
 ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config cn={5}kerberos
 ```
