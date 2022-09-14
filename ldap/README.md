@@ -69,3 +69,8 @@ ldapsearch -x -H ldap://ldap.default.svc.cloud.uat -D 'cn=admin,dc=default,dc=sv
 ```shell
 nmap -p 389 localhost
 ```
+
+- Perform a quick test by generating an LDAP Data Interchange Format (LDIF) dump of the contents of a the database:
+```shell
+slapcat
+```
