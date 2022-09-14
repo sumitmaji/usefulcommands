@@ -98,3 +98,19 @@ ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "ou=users,dc=cloud,dc=com" "cn=smaji"
 ```shell
 ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "ou=users,dc=cloud,dc=com" "cn=smaji" givenName
 ```
+
+- Add/Delete attribute of user
+```shelll
+ldapmodify -x -D "cn=admin,dc=cloud,dc=com" -w sumit -H ldapi:/// <<EOF
+dn: cn=smaji,ou=users,dc=cloud,dc=com
+changetype: modify
+add: mail
+mail: skmaji@outlook.com
+EOF
+
+ldapmodify -x -D "cn=admin,dc=cloud,dc=com" -w sumit -H ldapi:/// <<EOF
+dn: cn=smaji,ou=users,dc=cloud,dc=com
+changetype: modify
+delete: mail
+EOF
+```
