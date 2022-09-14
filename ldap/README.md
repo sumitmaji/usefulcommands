@@ -83,4 +83,9 @@ ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config
 - To filter a specific schema
 ```shell
 ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config cn={5}kerberos
+or 
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config olcDatabase={1}mdb
+or
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config "(|(cn=config)(olcDatabase={1}mdb))"
 ```
+
