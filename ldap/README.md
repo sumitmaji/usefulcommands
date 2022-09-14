@@ -64,3 +64,8 @@ ldapsearch -x -H ldap:/// -LLL -D 'cn=admin,dc=default,dc=svc,dc=cloud,dc=uat' -
 ldapsearch -x -H ldap:/// -L -D 'cn=admin,dc=default,dc=svc,dc=cloud,dc=uat' -w sumit -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "(uid=smaji)" dn -Z 
 ldapsearch -x -H ldap://ldap.default.svc.cloud.uat -D 'cn=admin,dc=default,dc=svc,dc=cloud,dc=uat' -w sumit -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "(uid=smaji)"
 ```
+
+- Run the following command to test if the OpenLDAP server is actually running:
+```shell
+nmap -p 389 localhost
+```
