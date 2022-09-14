@@ -101,6 +101,7 @@ ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "ou=users,dc=cloud,dc=com" "cn=smaji"
 
 - Add/Delete attribute of user
 ```shelll
+# mail attribute is part of inetOrgPerson objectclass.
 ldapmodify -x -D "cn=admin,dc=cloud,dc=com" -w sumit -H ldapi:/// <<EOF
 dn: cn=smaji,ou=users,dc=cloud,dc=com
 changetype: modify
