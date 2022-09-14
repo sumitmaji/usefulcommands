@@ -89,3 +89,7 @@ or
 ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config "(|(cn=config)(olcDatabase={1}mdb))"
 ```
 
+- To search for user under `ou=users,dc=cloud,dc=com`
+```shell
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "ou=users,dc=cloud,dc=com" "cn=smaji"
+```
