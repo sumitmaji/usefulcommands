@@ -3,6 +3,11 @@
 - Please refer the links for details about [kerberos](http://techpubs.spinlocksolutions.com/dklar/kerberos.html) 
 and [kerberized ssh](http://jurjenbokma.com/ApprenticesNotes/kerberized_ssh.xhtml).
 
+- To verify that the new MIT Kerberos V master server is indeed available on the network
+```shell
+nmap -sU -sT -p U:88,464,T:464,749 localhost
+```
+
 - Login the kerberos terminal as admin
 ```shell
 kadmin -p root/admin

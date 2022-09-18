@@ -64,3 +64,59 @@ ldapsearch -x -H ldap:/// -LLL -D 'cn=admin,dc=default,dc=svc,dc=cloud,dc=uat' -
 ldapsearch -x -H ldap:/// -L -D 'cn=admin,dc=default,dc=svc,dc=cloud,dc=uat' -w sumit -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "(uid=smaji)" dn -Z 
 ldapsearch -x -H ldap://ldap.default.svc.cloud.uat -D 'cn=admin,dc=default,dc=svc,dc=cloud,dc=uat' -w sumit -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "(uid=smaji)"
 ```
+
+- Run the following command to test if the OpenLDAP server is actually running:
+```shell
+nmap -p 389 localhost
+```
+
+- Perform a quick test by generating an LDAP Data Interchange Format (LDIF) dump of the contents of a the database:
+```shell
+slapcat
+```
+
+- To see all the schema
+```shell
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config
+```
+
+- To filter a specific schema
+```shell
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config cn={5}kerberos
+or 
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config olcDatabase={1}mdb
+or
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=config "(|(cn=config)(olcDatabase={1}mdb))"
+```
+
+- To search for user under `ou=users,dc=cloud,dc=com`
+```shell
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "ou=users,dc=cloud,dc=com" "cn=smaji"
+```
+
+- To seach for specific attribute
+```shell
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "ou=users,dc=cloud,dc=com" "cn=smaji" givenName
+```
+
+- Add/Delete attribute of user
+```shelll
+# mail attribute is part of inetOrgPerson objectclass.
+ldapmodify -x -D "cn=admin,dc=cloud,dc=com" -w sumit -H ldapi:/// <<EOF
+dn: cn=smaji,ou=users,dc=cloud,dc=com
+changetype: modify
+add: mail
+mail: skmaji@outlook.com
+EOF
+
+ldapmodify -x -D "cn=admin,dc=cloud,dc=com" -w sumit -H ldapi:/// <<EOF
+dn: cn=smaji,ou=users,dc=cloud,dc=com
+changetype: modify
+delete: mail
+EOF
+```
+
+- Search for an attribute
+```shell
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b "cn=config" | less
+```
