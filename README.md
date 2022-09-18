@@ -231,3 +231,8 @@ do
     cd ../
 done
 ```
+
+- Find files and change extension
+```shell
+find . -name "*.sh" -exec chmod +x {} \;
+```
