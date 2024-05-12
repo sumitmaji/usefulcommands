@@ -211,6 +211,19 @@ journalctl -b0 --system _COMM=systemd
 journalctl -b0 SYSLOG_PID=1
 journalctl -u kubelet
 ```
+- Use of ternary operator
+  ```shell
+[[ getLetsEncEnv = 'prod' ]] && echo "https://acme-v02.api.letsencrypt.org/directory " || echo "https://acme-staging-v02.api.letsencrypt.org/directory"
+  ```
+
+- Use of case statement
+```shell
+  case "$CERTMANAGER_CHALANGE_TYPE" in
+   'dns') echo "letsencrypt-$(getLetsEncEnv)" ;;
+   'http') echo "letsencrypt-$(getLetsEncEnv)" ;;
+   'selfsigned') echo "gokselfsign-ca-cluster-issuer" ;;
+  esac
+```
 
 - Installing package .deb packages
 ```shell
