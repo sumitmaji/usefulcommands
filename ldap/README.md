@@ -5,7 +5,7 @@
 
 - Search for user in ldap using admin
 ```shell
-ldapsearch -x -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "cn=smaji" -D "cn=admin,,dc=default,dc=svc,dc=cloud,dc=uat" -w sumit -H ldap://ldap.default.svc.cloud.uat -LLL -H
+ldapsearch -x -b "ou=users,dc=default,dc=svc,dc=cloud,dc=uat" "cn=smaji" -D "cn=admin,dc=default,dc=svc,dc=cloud,dc=uat" -w sumit -H ldap://ldap.default.svc.cloud.uat -LLL
 ```
 
 - Add user to ldap
