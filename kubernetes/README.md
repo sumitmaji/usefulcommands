@@ -90,13 +90,13 @@ kubectl delete pod --namespace kube-system -l k8s-app=kube-dns
     spec:
       containers:
       - name: main
-        image: tutum/curl
+        image: curlimages/curl
         command: ["sleep", "9999999"]
-    EOF  
+    EOF
     ```
     - Execute command in pod
     ```shell
-    kubectl exec -i -t curl -- curl -kv https://kubenetes 
+    kubectl exec -i -t curl -- curl -kv https://kubernetes 
     ```
     - By putting `CURL_CA_BUNDLE` environment variable, you dont need to specify `--cacert` in the curl command
     ```shell
